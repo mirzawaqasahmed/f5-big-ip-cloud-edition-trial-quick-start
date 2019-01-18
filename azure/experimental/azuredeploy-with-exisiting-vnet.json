@@ -233,7 +233,9 @@
         "intNicName2": "[concat('BIG-IQ-CM2-NetworkInterface-' , variables('resourceGroupName'),'-',uniquestring(variables('resourceGroupName'), resourceGroup().id, deployment().name))]",
         "mgmtSubnetName": "[parameters('mgmtSubnetName')]",
         "mgmtSubnetId": "[concat(variables('vnetId'), '/subnets/', variables('mgmtSubnetName'))]",
-        "mgmtNsgName": "[concat('BIG-IQ-', variables('resourceGroupName') ,'-SG','-',uniquestring(variables('resourceGroupName'), resourceGroup().id, deployment().name))]",
+        "mgmtNsgNameSrc": "[concat('BIG-IQ-SG-Src-', variables('resourceGroupName'),'-',uniquestring(variables('resourceGroupName'), resourceGroup().id, deployment().name))]",
+        "mgmtNsgNameNoSrc": "[concat('BIG-IQ-SG-', variables('resourceGroupName'),'-',uniquestring(variables('resourceGroupName'), resourceGroup().id, deployment().name))]",
+        "mgmtNsgName": "[if(equals(parameters('restrictedSrcAddress'), '*'), variables('mgmtNsgNameNoSrc'), variables('mgmtNsgNameSrc'))]",
         "mgmtNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups/',variables('mgmtNsgName'))]",
         "intSubnetName": "[parameters('internalSubnetName')]",
         "intSubnetId": "[concat(variables('vnetId'), '/subnets/', variables('intsubnetName'))]",
@@ -321,7 +323,7 @@
         {
             "condition": "[equals(parameters('restrictedSrcAddress'), '*')]",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('mgmtNsgName')]",
+            "name": "[variables('mgmtNsgNameNoSrc')]",
             "apiVersion": "[variables('networkApiVersion')]",
             "location": "[variables('location')]",
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
@@ -389,7 +391,7 @@
         {
             "condition": "[not(equals(parameters('restrictedSrcAddress'), '*'))]",
             "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('mgmtNsgName')]",
+            "name": "[variables('mgmtNsgNameSrc')]",
             "apiVersion": "[variables('networkApiVersion')]",
             "location": "[variables('location')]",
             "dependsOn": [

@@ -319,6 +319,7 @@
             }
         },
         {
+            "condition": "[equals(parameters('restrictedSrcAddress'), '*')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('mgmtNsgName')]",
             "apiVersion": "[variables('networkApiVersion')]",
@@ -379,6 +380,89 @@
                             "priority": 105,
                             "protocol": "Tcp",
                             "sourceAddressPrefix": "[parameters('restrictedSrcAddress')]",
+                            "sourcePortRange": "*"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "condition": "[not(equals(parameters('restrictedSrcAddress'), '*'))]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[variables('mgmtNsgName')]",
+            "apiVersion": "[variables('networkApiVersion')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[variables('intpublicIPAddressName')]"
+            ],
+            "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "ssh_allow_22",
+                        "properties": {
+                            "access": "Allow",
+                            "description": "",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "22",
+                            "direction": "Inbound",
+                            "priority": 102,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefixes": [
+                                "[parameters('restrictedSrcAddress')]",
+                                "[reference(variables('cmPublicIPAddressId')).ipAddress]"
+                            ],
+                            "sourcePortRange": "*"
+                        }
+                    },
+                    {
+                        "name": "http_allow_80",
+                        "properties": {
+                            "access": "Allow",
+                            "description": "",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "80",
+                            "direction": "Inbound",
+                            "priority": 103,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefixes": [
+                                "[parameters('restrictedSrcAddress')]",
+                                "[reference(variables('cmPublicIPAddressId')).ipAddress]"
+                            ],
+                            "sourcePortRange": "*"
+                        }
+                    },
+                    {
+                        "name": "ssl_allow_443",
+                        "properties": {
+                            "access": "Allow",
+                            "description": "",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "443",
+                            "direction": "Inbound",
+                            "priority": 104,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefixes": [
+                                "[parameters('restrictedSrcAddress')]",
+                                "[reference(variables('cmPublicIPAddressId')).ipAddress]"
+                            ],
+                            "sourcePortRange": "*"
+                        }
+                    },
+                    {
+                        "name": "mgmt_console_allow_443",
+                        "properties": {
+                            "access": "Allow",
+                            "description": "",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "8443",
+                            "direction": "Inbound",
+                            "priority": 105,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefixes": [
+                                "[parameters('restrictedSrcAddress')]",
+                                "[reference(variables('cmPublicIPAddressId')).ipAddress]"
+                            ],
                             "sourcePortRange": "*"
                         }
                     }

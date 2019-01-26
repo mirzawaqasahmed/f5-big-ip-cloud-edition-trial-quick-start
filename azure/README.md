@@ -16,7 +16,7 @@ To deploy this ARM template in Azure cloud, complete the following steps.
 
    Select **BIG-IP Cloud Edition - Advanced Web Application Firewall**
 
-2. Enable programmatic deployment for these F5 products:
+2. Enable programmatic deployment for these F5 products on the Microsoft marketplace:
 
    * F5 BIG-IQ Virtual Edition - (BYOL) or F5 BIG-IQ Centralized Manager (BYOL): [Navigate to Home > Marketplace > F5 BIG-IQ BYOL > Configure Programmatic Deployment](https://portal.azure.com/#blade/Microsoft_Azure_Marketplace/GalleryFeaturedMenuItemBlade/selectedMenuItemId/home/searchQuery/f5-big-iq/resetMenuId/)
    * F5 BIG-IP VE – ALL (BYOL, 1 Boot Location) [Navigate to Home > Marketplace > F5 BIG-IP VE – ALL (BYOL, 1 Boot Location) > Configure Programmatic Deployment](https://portal.azure.com/#blade/Microsoft_Azure_Marketplace/GalleryFeaturedMenuItemBlade/selectedMenuItemId/home/searchQuery/f5-big-ip-ve+byol/resetMenuId/)
